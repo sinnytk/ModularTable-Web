@@ -16,6 +16,7 @@ def main():
     sections = set()
     tt = load_workbook('timetable.xlsx')
     sheet = tt.worksheets[0]
+    # read timeslots
     for cell in sheet[4][2:]:
         if(cell.value == None):
             break
@@ -25,6 +26,7 @@ def main():
             end = time[1].split(':')
             timeslots.add(timeSlot(Time(int(start[0].strip()), int(
                 start[1].strip())), Time(int(end[0].strip()), int(end[1].strip()))))
+    # read venues
     for col in sheet.iter_cols(2, 2):
         empty = False
         for cell in col[4:]:
