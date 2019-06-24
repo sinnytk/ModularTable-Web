@@ -1,5 +1,6 @@
 *.py[co]
-
+*.ipynb
+*.xlsx
 # Packages
 *.egg
 *.egg-info
