@@ -1,7 +1,7 @@
 <h1 align="center">
     <br>
     <a href="https://github.com/sinnytk/ModularTable-Web"> 
-        <img src="https://github.com/sinnytk/ModularTable-Desktop/blob/master/ModularTable/src/mainwindow.png?raw=true">
+        <img src="https://imgur.com/aOgaKNM">
         </img>
     </a>
     <br>
