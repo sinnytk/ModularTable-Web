@@ -2,10 +2,51 @@ from openpyxl import load_workbook
 from datetime import time as Time
 
 
-class timeSlot():
+class TimeSlot():
     def __init__(self, startTime, endTime):
         self.startTime = startTime
         self.endTime = endTime
+    def __repr__(self):
+        return "TimeSlot(%s,%s)" % (self.startTime, self.endTime)
+class Teacher():
+    def __init__(self, teacherName):
+        self.teacherName = teacherName
+    def __repr__(self):
+        return "Teacher(%s)" % (self.teacherName)
+    def __eq__(self,other):
+        return self.teacherName == other.teacherName
+    def __hash__(self):
+        return hash(self.__repr__())
+class Slot():
+    def __init__(self, courseNum, teacherNum, sectionNum):
+        self.courseNum = courseNum
+        self.teacherNum = teacherNum
+        self.sectionNum = sectionNum
+    def __repr__(self):
+        return "Slot(%s,%s,%s)" % (self.courseNum,self.teacherNum,self.sectionNum)
+    def __eq__(self, other):
+        return (self.courseNum == other.courseNum) and (self.sectionNum == other.sectionNum) and (self.teacherNum == other.teacherNum)
+    def __hash__(self):
+        return hash(self.__repr__())
+class Section():
+    def __init__(self,semester,section):
+        self.semester = semester
+        self.section = section
+    def __repr__(self):
+        return "Section(%s,%s)" % (self.semester, self.section)
+    def __eq__(self, other):
+        return (self.semester == other.semester and self.section == other.section)
+    def __hash__(self):
+        return hash(self.__repr__())
+class Course():
+    def __init__(self,courseCode):
+        self.courseCode = courseCode
+    def __repr__(self):
+        return "Course(%s)" % (self.courseCode)
+    def __eq__(self, other):
+        return (self.courseCode == other.courseCode)
+    def __hash__(self):
+        return hash(self.__repr__())
 
 
 def main():
