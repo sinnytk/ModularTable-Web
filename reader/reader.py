@@ -49,6 +49,17 @@ class Course():
         return hash(self.__repr__())
 
 
+
+#dict for records which may be repeated
+#list for records which are constant
+venues = []
+teachers = {}
+timeslots = []
+courses = {}
+slots = []
+sections = {}
+
+
 def main():
     venues = set()
     teachers = set()
