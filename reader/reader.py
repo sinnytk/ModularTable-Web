@@ -50,22 +50,15 @@ class Course():
 
 
 
-#dict for records which may be repeated
-#list for records which are constant
-venues = []
-teachers = {}
-timeslots = []
-courses = {}
-slots = []
-sections = {}
-
-
 def main():
-    venues = set()
-    teachers = set()
-    timeslots = set()
-    courses = set()
-    sections = set()
+    #dict for records which may be repeated
+    #list for records which are constant
+    venues = []
+    teachers = {}
+    timeslots = []
+    courses = {}
+    slots = []
+    sections = {}
     tt = load_workbook('timetable.xlsx')
     sheet = tt.worksheets[0]
     # read timeslots
