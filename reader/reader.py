@@ -69,14 +69,14 @@ def main():
             time = cell.value.split(' - ')
             start = time[0].split(':')
             end = time[1].split(':')
-            timeslots.add(timeSlot(Time(int(start[0].strip()), int(
+            timeslots.append(TimeSlot(Time(int(start[0].strip()), int(
                 start[1].strip())), Time(int(end[0].strip()), int(end[1].strip()))))
     # read venues
     for col in sheet.iter_cols(2, 2):
         empty = False
         for cell in col[4:]:
             if(cell.value is not None):
-                venues.add(cell.value.strip().upper())
+                venues.append(cell.value.strip().upper())
             elif(empty):
                 break
             else:
