@@ -89,6 +89,37 @@ def main():
             else:
                 empty = True
 
-
+    teacherCount = 0
+    sectionCount = 0
+    courseCount = 0
+    for i in range(len(venues)):
+        for j in range(len(timeslots)):
+            if(sheet.cell(i+5,2).value is None): #if no venue, probably filler therefore continue
+                continue
+            slot=sheet.cell(i+5,j+3).value
+            if(slot is None): #if slotvalue empty, it's an unoccupied slot
+                slots.append(Slot(None,None,None))
+            else:
+                slotvalues = slot.split('\n')
+                #getting the course
+                courseObj=Course(slotvalues[0].strip().upper())
+                if courseObj not in courses:
+                    courseCount += 1
+                    courses[courseObj] = courseCount
+                
+                #getting the teacher
+                teacherObj = Teacher(slotvalues[1].strip().upper())
+                if teacherObj not in teachers:
+                    teacherCount += 1
+                    teachers[teacherObj] = teacherCount
+                
+                #getting the section(also atomically dividing the attributes)
+                sectionValues=slotvalues[2].replace('[','').replace(']','').replace('/','')
+                sectionObj = Section(int(sectionValues[0]),(sectionValues[1:]))
+                if sectionObj not in sections:
+                    sectionCount +=1
+                    sections[sectionObj] = sectionCount
+                
+                slots.append(Slot(courses[courseObj],teachers[teacherObj],sections[sectionObj]))
 if __name__ == "__main__":
     main()
