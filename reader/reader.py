@@ -1,5 +1,7 @@
 from openpyxl import load_workbook
 from datetime import time as Time
+import config
+import mysql.connector
 
 
 class TimeSlot():
@@ -8,13 +10,17 @@ class TimeSlot():
         self.endTime = endTime
     def __repr__(self):
         return "TimeSlot(%s,%s)" % (self.startTime, self.endTime)
+    def __eq__(self,other):
+        return (type(self) == type(other)) and (self.startTime == other.startTime) and (self.endTime == other.endTime)
+    def __hash__(self):
+        return hash(self.__repr__())
 class Teacher():
     def __init__(self, teacherName):
         self.teacherName = teacherName
     def __repr__(self):
         return "Teacher(%s)" % (self.teacherName)
     def __eq__(self,other):
-        return self.teacherName == other.teacherName
+        return type(self) == type(other) and self.teacherName == other.teacherName
     def __hash__(self):
         return hash(self.__repr__())
 class Slot():
@@ -28,7 +34,7 @@ class Slot():
     def __repr__(self):
         return "Slot(%s,%s,%s,%s,%s,%s)" % (self.dayNum,self.venueNum,self.timeslotNum, self.courseNum,self.teacherNum,self.sectionNum)
     def __eq__(self, other):
-        return (self.courseNum == other.courseNum) and (self.sectionNum == other.sectionNum) and (self.teacherNum == other.teacherNum)
+        return (type(self) == type(other)) and (self.courseNum == other.courseNum) and (self.sectionNum == other.sectionNum) and (self.teacherNum == other.teacherNum)
     def __hash__(self):
         return hash(self.__repr__())
 class Section():
@@ -38,7 +44,7 @@ class Section():
     def __repr__(self):
         return "Section(%s,%s)" % (self.semester, self.section)
     def __eq__(self, other):
-        return (self.semester == other.semester and self.section == other.section)
+        return ((type(self) == type(other)) and  self.semester == other.semester and self.section == other.section)
     def __hash__(self):
         return hash(self.__repr__())
 class Course():
@@ -47,7 +53,7 @@ class Course():
     def __repr__(self):
         return "Course(%s)" % (self.courseCode)
     def __eq__(self, other):
-        return (self.courseCode == other.courseCode)
+        return ((type(self) == type(other)) and self.courseCode == other.courseCode)
     def __hash__(self):
         return hash(self.__repr__())
 class Venue():
@@ -56,7 +62,7 @@ class Venue():
     def __repr__(self):
         return "Venue(%s)" % (self.venueName)
     def __eq__(self,other):
-        return self.venueName == other.venueName
+        return (type(self) == type(other)) and self.venueName == other.venueName 
     def __hash__(self):
         return hash(self.__repr__())
 
@@ -88,9 +94,9 @@ def main():
             if(cell.value == None):
                 break
             else:
-                time = cell.value.split(' - ')
-                start = time[0].split(':')
-                end = time[1].split(':')
+                time = cell.value.split('-')
+                start = time[0].replace(' ','').split(':')
+                end = time[1].replace(' ','').split(':')
                 timeslots.append(TimeSlot(Time(int(start[0].strip()), int(
                     start[1].strip())), Time(int(end[0].strip()), int(end[1].strip()))))
         # read venues
@@ -98,60 +104,110 @@ def main():
             empty = False
             for cell in col[4:]:
                 if(cell.value is not None):
-                    venues.append(cell.value.strip().upper())
+                    venues.append(Venue(cell.value.strip().upper()))
                 elif(empty):
                     break
                 else:
                     empty = True
         #saving newly found venues and timeslots in global dictionaries
         for venue in venues:
-        if venue not in all_venues:
-            venue_count+=1
-            all_venues[venue] = venue_count
+            if venue not in all_venues:
+                venue_count+=1
+                all_venues[venue] = venue_count
         for timeslot in timeslots:
-        if timeslot not in all_timeslots:
-            timeslot_count+=1
-            all_timeslots[timeslot] = timeslot_count
+            if timeslot not in all_timeslots:
+                timeslot_count+=1
+                all_timeslots[timeslot] = timeslot_count
         #iterating over each slot of timetable
         for i, venue in zip(range(len(venues)),venues):
             for j, timeslot in zip(range(len(timeslots)),timeslots):
                 if(sheet.cell(i+5,2).value is None): #if no venue, probably filler therefore continue
-                continue
-            slot=sheet.cell(i+5,j+3).value
-            if(slot is None): #if slotvalue empty, it's an unoccupied slot
-                slots.append(Slot(sheetnum+1,all_venues[venue],all_timeslots[timeslot],None,None,None))
-            elif(len(slot.split('\n'))!=3): #if slotvalue cannot be divided into 3 parts, it's invalid therefore skip
-                slots.append(Slot(sheetnum+1,all_venues[venue],all_timeslots[timeslot],None,None,None))
-            else:
-                slotvalues = slot.split('\n')
-                #getting the course
-                if(slotvalues[0].strip().upper() is not None):
-                    courseObj=Course(slotvalues[0].strip().upper())
-                    if courseObj not in all_courses:
-                        course_count += 1
-                        all_courses[courseObj] = course_count
+                    continue
+                slot=sheet.cell(i+5,j+3).value
+                if(slot is None): #if slotvalue empty, it's an unoccupied slot
+                    slots.append(Slot(sheetnum+1,all_venues[venue],all_timeslots[timeslot],None,None,None))
+                elif(len(slot.split('\n'))!=3): #if slotvalue cannot be divided into 3 parts, it's invalid therefore skip
+                    slots.append(Slot(sheetnum+1,all_venues[venue],all_timeslots[timeslot],None,None,None))
                 else:
-                    courseObj=''
+                    slotvalues = slot.split('\n')
+                    #getting the course
+                    if(slotvalues[0].strip().upper() is not None):
+                        courseObj=Course(slotvalues[0].strip().upper())
+                        if courseObj not in all_courses:
+                            course_count += 1
+                            all_courses[courseObj] = course_count
+                    else:
+                        courseObj=''
 
-                #getting the teacher
-                if(slotvalues[1].strip().upper() is not None):
-                    teacherObj = Teacher(slotvalues[1].strip().upper())
-                    if teacherObj not in all_teachers:
-                        teacher_count += 1
-                        all_teachers[teacherObj] = teacher_count
-                else:
-                    teacherObj=''
+                    #getting the teacher
+                    if(slotvalues[1].strip().upper() is not None):
+                        teacherObj = Teacher(slotvalues[1].strip().upper())
+                        if teacherObj not in all_teachers:
+                            teacher_count += 1
+                            all_teachers[teacherObj] = teacher_count
+                    else:
+                        teacherObj=''
 
-                #getting the section(also atomically dividing the attributes)
-                sectionValues=slotvalues[2].replace('[','').replace(']','').replace('/','')
-                if(sectionValues[0] in '12345678'):
-                    sectionObj = Section(int(sectionValues[0]),(sectionValues[1:]))
-                    if sectionObj not in all_sections:
-                        section_count +=1
-                        all_sections[sectionObj] = section_count
-                else:
-                    sectionObj=''
+                    #getting the section(also atomically dividing the attributes)
+                    sectionValues=slotvalues[2].replace('[','').replace(']','').replace('/','')
+                    if(sectionValues[0] in '12345678'):
+                        sectionObj = Section(int(sectionValues[0]),(sectionValues[1:]))
+                        if sectionObj not in all_sections:
+                            section_count +=1
+                            all_sections[sectionObj] = section_count
+                    else:
+                        sectionObj=''
+    
+                    slots.append(Slot(sheetnum+1,all_venues[venue],all_timeslots[timeslot],all_courses[courseObj],all_teachers[teacherObj],all_sections[sectionObj]))
+    
+    try:
+        dbconn = mysql.connector.connect(
+            host=config.host,
+            user=config.user,
+            passwd=config.passwd,
+            database=config.database
+        )
+        courseQuery = ("INSERT INTO courses" "(courseCode) " "values (%s)")
+        sectionQuery = ("INSERT INTO sections" "(semester,section) " "values (%s,%s)")
+        teacherQuery = ("INSERT INTO teachers" "(teacherName) " "values (%s)")
+        timeslotQuery = ("INSERT INTO timeslots" "(startTime, endTime) " "values (%s,%s)")
+        venueQuery = ("INSERT INTO venues" "(venueName) " "values (%s)")
+        slotQuery = ("INSERT INTO slots " "values (%s,%s,%s,%s,%s,%s)")
+        
+        cursor=dbconn.cursor()
+        cursor.execute("SET FOREIGN_KEY_CHECKS=0")
+        for course in all_courses:
+            if course != '':
+                print("Inserting "+course.__repr__())
+                cursor.execute(courseQuery, (course.courseCode, ))
+        for section in all_sections:
+            if section != '':
+                print("Inserting "+section.__repr__())
+                cursor.execute(sectionQuery,(section.semester,section.section))
+        for teacher in all_teachers:
+            if teacher != '':
+                print("Inserting "+teacher.__repr__())
+                cursor.execute(teacherQuery,(teacher.teacherName, ))
+        for timeslot in all_timeslots:
+            if timeslot != '':  
+                print("Inserting "+timeslot.__repr__())
+                cursor.execute(timeslotQuery,(timeslot.startTime,timeslot.endTime))
+        for venue in all_venues:
+            if venue != '':                 
+                print("Inserting "+venue.__repr__())
+                cursor.execute(venueQuery, (venue.venueName, ))
+        for slot in slots:
+            if slot != '':
+                print("Inserting "+slot.__repr__())
+                cursor.execute(slotQuery, (slot.dayNum,slot.venueNum,slot.timeslotNum, slot.courseNum,slot.teacherNum,slot.sectionNum))
+        cursor.execute("SET FOREIGN_KEY_CHECKS=1")
+        dbconn.commit()        
+    except mysql.connector.Error as error:
+        print("Fail {}".format(error))
+    finally:
+        if(dbconn.is_connected()):
+            cursor.close()
+            dbconn.close() 
 
-                slots.append(Slot(sheetnum+1,all_venues[venue],all_timeslots[timeslot],all_courses[courseObj],all_teachers[teacherObj],all_sections[sectionObj]))
 if __name__ == "__main__":
     main()

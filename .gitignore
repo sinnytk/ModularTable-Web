@@ -17,6 +17,9 @@ develop-eggs
 # Installer logs
 pip-log.txt
 
+# database 
+reader/config.py
+
 # Unit test / coverage reports
 .coverage
 .tox
