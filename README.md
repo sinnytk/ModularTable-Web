@@ -11,7 +11,7 @@
 
 <h1>Work in progress</h1>
 
-<h3>TO-DO</h3>
+<h3>TO-DO</h3><br><br>
 - ~~Design the database schema to store the timetable~~
 - ~~Create a Python script to read XLSX based timetable~~
 - ~~Implement SQL storage through the script~~
