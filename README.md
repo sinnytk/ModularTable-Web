@@ -9,9 +9,9 @@
 
 <h4 align="center">A full-stack web application to query DSU timetable, built on top of <a href='https://github.com/django/django'>Django</a>, <a href='https://github.com/mysqljs/mysql'>MySQL</a> and <a href='https://github.com/facebook/react'>React.js</a></h4>
 
-#Work in progress
+<h1>Work in progress</h1>
 
-###TO-DO
+<h3>TO-DO</h3>
 - ~~Design the database schema to store the timetable~~
 - ~~Create a Python script to read XLSX based timetable~~
 - ~~Implement SQL storage through the script~~
