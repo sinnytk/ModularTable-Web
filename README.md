@@ -17,4 +17,8 @@
 - ~~Create a Python script to read XLSX based timetable~~
 - ~~Implement SQL storage through the script~~
 - ~~Initialize Django application and import the SQL relations~~
-- Formulate a RESTful API for accessing the database
+- ~~Formulate a RESTful API for accessing the database~~
+- Write documentation for API
+- Start developing a Front-End using React.js as skeleton
+- Formulate an admin panel to update the timetable
+- Look for options on how to deploy Django application and the database
