@@ -44,3 +44,24 @@ Scripts
 
 # MacOSX
 .DS_Store
+
+modulartable-react/node_modules
+modulartable-react/.pnp
+.pnp.js
+
+# testing
+modulartable-react/coverage
+
+# production
+modulartable-react/build
+
+# misc
+modulartable-react/DS_Store
+modulartable-react/env.local
+modulartable-react/env.development.local
+modulartable-react/env.test.local
+modulartable-react/env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
