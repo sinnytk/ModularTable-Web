@@ -43,6 +43,9 @@ Scripts
 *~
 *.db
 
+# Django enivornment
+modulartable-django/env
+
 # MacOSX
 .DS_Store
 
