@@ -19,6 +19,7 @@ pip-log.txt
 
 # database 
 reader/config.py
+reader/createdatabase.py
 
 # Unit test / coverage reports
 .coverage
