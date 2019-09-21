@@ -52,6 +52,7 @@ modulartable-django/env
 
 modulartable-react/node_modules
 modulartable-react/.pnp
+modulartable-react/*.lock
 .pnp.js
 
 # testing
