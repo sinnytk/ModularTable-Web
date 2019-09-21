@@ -78,8 +78,6 @@ class SlotListView(generics.ListAPIView):
     model = Slots
     serializer_class = SlotSerializer
     def get_queryset(self):
-        print(self)
-        print(self.request.data)
         queryset=Slots.objects.all()
         if 'dayNum' in self.request.data:
             queryset=queryset.filter(daynum=self.request.data['dayNum'])
