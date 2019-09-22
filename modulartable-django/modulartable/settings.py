@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'API',
     'core',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -39,9 +40,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'modulartable.urls'
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
 
 TEMPLATES = [
     {
@@ -68,10 +74,10 @@ WSGI_APPLICATION = 'modulartable.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':config.database,
-        'USER':config.user,
-        'PASSWORD':config.passwd,
-        'HOST':config.host,
+        'NAME': config.database,
+        'USER': config.user,
+        'PASSWORD': config.passwd,
+        'HOST': config.host,
 
     }
 }
