@@ -116,7 +116,7 @@ class SlotListView(generics.ListAPIView):
                 teachernum__teachername__icontains=self.request.query_params['teacherName'])
         if 'sectionNum' in self.request.query_params:
             queryset = queryset.filter(
-                sectionnum=self.request.query_params['sectioNum'])
+                sectionnum=self.request.query_params['sectionNum'])
         elif 'semester' in self.request.query_params:
             queryset = queryset.filter(
                 sectionnum__semester=self.request.query_params['semester'])
