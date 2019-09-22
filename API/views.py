@@ -12,10 +12,12 @@ class VenueListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Venues.objects.all()
-        if 'venueName' in self.request.data:
-            queryset = queryset.filter(venuename=self.request.data['venueName'])
-        if 'venueNum' in self.request.data:
-            queryset = queryset.filter(venuenum=self.request.data['venueNum'])
+        if 'venueName' in self.request.query_params:
+            queryset = queryset.filter(
+                venuename=self.request.query_params['venueName'])
+        if 'venueNum' in self.request.query_params:
+            queryset = queryset.filter(
+                venuenum=self.request.query_params['venueNum'])
         return queryset
 
 
@@ -25,11 +27,14 @@ class CourseListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Courses.objects.all()
-        if 'courseCode' in self.request.data:
-            queryset = queryset.filter(coursecode=self.request.data['courseCode'])
-        if 'courseNum' in self.request.data:
-            queryset = queryset.filter(coursenum=self.request.data['courseNum'])
+        if 'courseCode' in self.request.query_params:
+            queryset = queryset.filter(
+                coursecode=self.request.query_params['courseCode'])
+        if 'courseNum' in self.request.query_params:
+            queryset = queryset.filter(
+                coursenum=self.request.query_params['courseNum'])
         return queryset
+
 
 class TeacherListView(generics.ListAPIView):
     model = Teachers
@@ -37,10 +42,12 @@ class TeacherListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Teachers.objects.all()
-        if 'teacherName' in self.request.data:
-            queryset = queryset.filter(teachername=self.request.data['teacherName'])
-        if 'teacherNum' in self.request.data:
-            queryset = queryset.filter(teaechernum=self.request.data['teacherNum'])
+        if 'teacherName' in self.request.query_params:
+            queryset = queryset.filter(
+                teachername=self.request.query_params['teacherName'])
+        if 'teacherNum' in self.request.query_params:
+            queryset = queryset.filter(
+                teaechernum=self.request.query_params['teacherNum'])
         return queryset
 
 
@@ -50,12 +57,15 @@ class SectionListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Teachers.objects.all()
-        if 'sectionNum' in self.request.data:
-            queryset = queryset.filter(sectionum=self.request.data['sectionNum'])
-        if 'section' in self.request.data:
-            queryset = queryset.filter(section=self.request.data['section'])
-        if 'semester' in self.request.data:
-            queryset = queryset.filter(semester=self.request.data['semester'])
+        if 'sectionNum' in self.request.query_params:
+            queryset = queryset.filter(
+                sectionum=self.request.query_params['sectionNum'])
+        if 'section' in self.request.query_params:
+            queryset = queryset.filter(
+                section=self.request.query_params['section'])
+        if 'semester' in self.request.query_params:
+            queryset = queryset.filter(
+                semester=self.request.query_params['semester'])
         return queryset
 
 
@@ -65,43 +75,53 @@ class TimeslotListView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Teachers.objects.all()
-        if 'timeslotNum' in self.request.data:
-            queryset = queryset.filter(timeslot=self.request.data['timeslotNum'])
-        if 'starttime' in self.request.data:
-            queryset = queryset.filter(starttime=self.request.data['starttime'])
-        if 'endttime' in self.request.data:
-            queryset = queryset.filter(endttime=self.request.data['endttime'])
+        if 'timeslotNum' in self.request.query_params:
+            queryset = queryset.filter(
+                timeslot=self.request.query_params['timeslotNum'])
+        if 'starttime' in self.request.query_params:
+            queryset = queryset.filter(
+                starttime=self.request.query_params['starttime'])
+        if 'endttime' in self.request.query_params:
+            queryset = queryset.filter(
+                endttime=self.request.query_params['endttime'])
         return queryset
 
 
 class SlotListView(generics.ListAPIView):
     model = Slots
     serializer_class = SlotSerializer
+
     def get_queryset(self):
-        queryset=Slots.objects.all()
-        if 'dayNum' in self.request.data:
-            queryset=queryset.filter(daynum=self.request.data['dayNum'])
-            print(queryset)
-        if 'venueNum' in self.request.data:
-            queryset=queryset.filter(venuenum=self.request.data['venueNum'])
-        elif 'venueName' in self.request.data:
-            queryset=queryset.filter(venuenum__venuename=self.request.data['venueName'])
-        if 'courseNum' in self.request.data:
-            queryset=queryset.filter(coursenum=self.request.data['courseNum'])
-        elif 'courseCode' in self.request.data:
-            queryset=queryset.filter(coursenum__coursecode=self.request.data['courseCode'])
-        if 'teacherNum' in self.request.data:
-            queryset=queryset.filter(teachernum=self.request.data['teacherNum'])
-        elif 'teacherName' in self.request.data:
-            queryset=queryset.filter(teachernum__teachername__icontains=self.request.data['teacherName'])
-        if 'sectionNum' in self.request.data:
-            queryset=queryset.filter(sectionnum=self.request.data['sectioNum'])
-        elif 'semester' in self.request.data:
-            queryset=queryset.filter(sectionnum__semester=self.request.data['semester'])
-            if 'section' in self.request.data:
-                queryset=queryset.filter(sectionum__section=self.request.data['section'])
-        
+        queryset = Slots.objects.all()
+        if 'dayNum' in self.request.query_params:
+            queryset = queryset.filter(
+                daynum=self.request.query_params['dayNum'])
+        if 'venueNum' in self.request.query_params:
+            queryset = queryset.filter(
+                venuenum=self.request.query_params['venueNum'])
+        elif 'venueName' in self.request.query_params:
+            queryset = queryset.filter(
+                venuenum__venuename=self.request.query_params['venueName'])
+        if 'courseNum' in self.request.query_params:
+            queryset = queryset.filter(
+                coursenum=self.request.query_params['courseNum'])
+        elif 'courseCode' in self.request.query_params:
+            queryset = queryset.filter(
+                coursenum__coursecode=self.request.query_params['courseCode'])
+        if 'teacherNum' in self.request.query_params:
+            queryset = queryset.filter(
+                teachernum=self.request.query_params['teacherNum'])
+        elif 'teacherName' in self.request.query_params:
+            queryset = queryset.filter(
+                teachernum__teachername__icontains=self.request.query_params['teacherName'])
+        if 'sectionNum' in self.request.query_params:
+            queryset = queryset.filter(
+                sectionnum=self.request.query_params['sectioNum'])
+        elif 'semester' in self.request.query_params:
+            queryset = queryset.filter(
+                sectionnum__semester=self.request.query_params['semester'])
+            if 'section' in self.request.query_params:
+                queryset = queryset.filter(
+                    sectionum__section=self.request.query_params['section'])
+
         return queryset
-
-            
-
