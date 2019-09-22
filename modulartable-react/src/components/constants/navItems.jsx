@@ -1,0 +1,1 @@
+export const navItems = ['Create','Home','Query']
