@@ -2,8 +2,10 @@ from core.models import Slots
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from core.models import Slots, Venues, Courses, Teachers, Sections, Timeslots
-from .serializers import SlotSerializer, VenueSerializer, CourseSerializer, TeacherSerializer, SectionSerializer, TimeslotSerializer
+from .serializers import SlotSerializer, VenueSerializer, CourseSerializer, TeacherSerializer, SectionSerializer, TimeslotSerializer, SlotListSerializer
+from collections import defaultdict
 
 
 class VenueListView(generics.ListAPIView):
@@ -125,3 +127,33 @@ class SlotListView(generics.ListAPIView):
                     sectionum__section=self.request.query_params['section'])
 
         return queryset
+
+
+class TimetableGenerateView(APIView):
+    def get(self, request):
+        data = defaultdict(lambda: defaultdict(list))
+        slots = Slots.objects.all().order_by('daynum', 'venuenum__venuename', 'timeslot')
+        daynum = self.request.query_params.get('dayNum', None)
+        sectionnum = self.request.query_params.get('sectionNum', None)
+        venuenum = self.request.query_params.get('venueNum', None)
+        teachernum = self.request.query_params.get('teacherNum', None)
+        coursenum = self.request.query_params.get('courseNum', None)
+        timeslot = self.request.query_params.get('timeslotNum', None)
+
+        if daynum:
+            slots = slots.filter(daynum=daynum)
+        if sectionnum:
+            slots = slots.filter(sectionnum=sectionnum)
+        if venuenum:
+            slots = slots.filter(venuenum=venuenum)
+        if teachernum:
+            slots = slots.filter(teachernum=teachernum)
+        if coursenum:
+            slots = slots.filter(coursenum=coursenum)
+        if timeslot:
+            slots = slots.filter(timeslot=timeslot)
+
+        for slot in slots:
+            data[slot.daynum][slot.venuenum.venuename].append(
+                SlotSerializer(slot).data)
+        return Response(data)

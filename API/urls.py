@@ -7,7 +7,7 @@ urlpatterns = [
     path("venues", views.VenueListView.as_view(), name='venue-list'),
     path("courses", views.CourseListView.as_view(), name='course-list'),
     path("sections", views.SectionListView.as_view(), name='section-list'),
-    path("timeslots", views.TimeslotListView.as_view(), name='timeslot-list')
-
+    path("timeslots", views.TimeslotListView.as_view(), name='timeslot-list'),
+    path("timetable", views.TimetableGenerateView.as_view(), name='timeslot-list')
 
 ]
