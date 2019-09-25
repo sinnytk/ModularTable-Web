@@ -1,16 +1,19 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { SLOTS_ENDPOINT } from "../constants/endpoints";
+import { TIMETABLE_ENDPOINT } from "../constants/endpoints";
+import Slot from "./Timetable/Slot";
+import Grid from "@material-ui/core/Grid";
+
 export default class TimetableCreate extends Component {
   state = {
     timeslots: null,
     days: null,
-    slots: []
+    slots: null,
+    selectedDay: 1
   };
   componentDidMount() {
-    console.log(this.state.firstTime);
     axios
-      .get(SLOTS_ENDPOINT)
+      .get(TIMETABLE_ENDPOINT)
       .then(response => {
         const slots = response.data;
         this.setState({ slots });
@@ -21,29 +24,27 @@ export default class TimetableCreate extends Component {
   }
   render() {
     const slots = this.state.slots;
+    {
+      console.log(slots);
+    }
+    const selectedDay = this.state.selectedDay;
+
     return (
-      <ul>
-        {slots.map(slot => (
-          <li
-            key={`${slot.daynum}-${slot.venue.venuenum}-${slot.timeslot.timeslotnum}`}
-          >
-            <div>
-              <p>Venue: {slot.venue.venuename}</p>
-              <p>
-                Timeslot:
-                {`${slot.timeslot.starttime} - ${slot.timeslot.endtime}`}
-              </p>
-              {slot.teacher && <p>Teacher: {slot.teacher.teachername}</p>}
-              {slot.section && (
-                <p>
-                  Section:{`${slot.section.semester}${slot.section.section}`}
-                </p>
-              )}
-              {slot.course && <p>Course: {slot.course.coursecode}</p>}
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div>
+        <Grid container direction="row" justify="center">
+          {slots &&
+            Object.entries(slots[selectedDay]).map(keyValue =>
+              keyValue[1].map(slot => (
+                <Grid
+                  key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
+                  item
+                >
+                  <Slot attributes={slot} />
+                </Grid>
+              ))
+            )}
+        </Grid>
+      </div>
     );
   }
 }
