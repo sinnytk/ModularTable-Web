@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from core.models import Slots, Venues, Courses, Teachers, Sections, Timeslots
-from .serializers import SlotSerializer, VenueSerializer, CourseSerializer, TeacherSerializer, SectionSerializer, TimeslotSerializer, SlotListSerializer
+from .serializers import SlotSerializer, VenueSerializer, CourseSerializer, TeacherSerializer, SectionSerializer, TimeslotSerializer
 from collections import defaultdict
 
 
