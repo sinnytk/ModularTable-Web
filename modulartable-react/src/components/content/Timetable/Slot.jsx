@@ -16,12 +16,13 @@ const days = [
 
 const useStyles = makeStyles(theme => ({
   root: {
-    textAlign: "center",
-    height: "15vh",
-    width: "20vh",
-    padding: theme.spacing(3, 2),
-    margin: "5px"
-  }
+    minWidth: 150,
+    minHeight: 120,
+    width: "100%",
+    height: "100%",
+    textAlign: "center"
+  },
+  content: { padding: "10%" }
 }));
 
 const Slot = ({ attributes }) => {
@@ -30,20 +31,15 @@ const Slot = ({ attributes }) => {
   return (
     <Paper className={classes.root}>
       {!isEmpty && (
-        <div>
-          <Typography component="p">{days[attributes["daynum"]]}</Typography>
-          <Typography component="p">{attributes.venue.venuename}</Typography>
-          <Typography component="p">
-            {` ${attributes.timeslot.starttime} - ${attributes.timeslot.endtime}`}
-          </Typography>
-          <Typography component="p">
+        <div className={classes.content}>
+          <Typography component="p" variant="body2">
             {attributes.teacher && `${attributes.teacher.teachername}`}
           </Typography>
-          <Typography component="p">
+          <Typography component="p" variant="body2">
             {attributes.section &&
               `${attributes.section.semester}${attributes.section.section}`}
           </Typography>
-          <Typography component="p">
+          <Typography component="p" variant="body2">
             {attributes.course && `${attributes.course.coursecode}`}
           </Typography>
         </div>
