@@ -8,7 +8,6 @@ import "./TimetableCreate.css";
 export default class TimetableCreate extends Component {
   state = {
     timeslots: null,
-    days: null,
     slots: this.props.slots,
     selectedDay: 1
   };
@@ -31,22 +30,35 @@ export default class TimetableCreate extends Component {
     const selectedDay = this.state.selectedDay;
     return (
       <div style={{ width: "100%", height: "100%" }}>
-        <table>
-          {slots &&
-            Object.entries(slots[selectedDay]).map(keyValue => (
+        {slots && (
+          <table>
+            <tbody>
               <tr>
-                <th className="slotVenue">{keyValue[0]}</th>
-                {keyValue[1].map(slot => (
-                  <td
-                    key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
-                    item
-                  >
-                    <Slot attributes={slot} />
-                  </td>
-                ))}
+                <th></th>
+                {slots[selectedDay][Object.keys(slots[selectedDay])[0]].map(
+                  slot => (
+                    <th className="slotTime" key={slot.timeslot.timeslotnum}>
+                      {`${slot.timeslot.starttime}-${slot.timeslot.endtime}`}
+                    </th>
+                  )
+                )}
               </tr>
-            ))}
-        </table>
+              {Object.entries(slots[selectedDay]).map(keyValue => (
+                <tr key={keyValue[0]}>
+                  <th className="slotVenue">{keyValue[0]}</th>
+                  {keyValue[1].map(slot => (
+                    <td
+                      key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
+                      item
+                    >
+                      <Slot attributes={slot} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     );
   }
