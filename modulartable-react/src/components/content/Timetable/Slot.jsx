@@ -3,26 +3,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 
-const days = [
-  "",
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
-  "SUNDAY"
-];
-
 const useStyles = makeStyles(theme => ({
   root: {
-    minWidth: 150,
-    minHeight: 120,
-    width: "100%",
-    height: "100%",
-    textAlign: "center"
+    textAlign: "center",
+    minWidth: "1.1vw",
+    minHeight: "5vw"
   },
-  content: { padding: "10%" }
+  content: { paddingTop: "10%" }
 }));
 
 const Slot = ({ attributes }) => {
@@ -32,14 +19,14 @@ const Slot = ({ attributes }) => {
     <Paper className={classes.root}>
       {!isEmpty && (
         <div className={classes.content}>
-          <Typography component="p" variant="body2">
+          <Typography variant="caption" display="block">
             {attributes.teacher && `${attributes.teacher.teachername}`}
           </Typography>
-          <Typography component="p" variant="body2">
+          <Typography variant="caption" display="block">
             {attributes.section &&
               `${attributes.section.semester}${attributes.section.section}`}
           </Typography>
-          <Typography component="p" variant="body2">
+          <Typography variant="caption" display="block">
             {attributes.course && `${attributes.course.coursecode}`}
           </Typography>
         </div>
