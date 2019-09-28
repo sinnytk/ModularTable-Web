@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { TIMETABLE_ENDPOINT } from "../constants/endpoints";
 import Slot from "./Timetable/Slot";
-import { Paper } from "@material-ui/core";
+import TimetableForm from "./Timetable/TimetableForm";
 import "./TimetableCreate.css";
 
 export default class TimetableCreate extends Component {
@@ -25,41 +25,53 @@ export default class TimetableCreate extends Component {
         });
     }
   }
+  handleDayChange = selectedDay => {
+    this.setState({ selectedDay });
+  };
   render() {
     const slots = this.state.slots;
     const selectedDay = this.state.selectedDay;
     return (
-      <div style={{ width: "100%", height: "100%" }}>
-        {slots && (
-          <table>
-            <tbody>
-              <tr>
-                <th></th>
-                {slots[selectedDay][Object.keys(slots[selectedDay])[0]].map(
-                  slot => (
-                    <th className="slotTime" key={slot.timeslot.timeslotnum}>
-                      {`${slot.timeslot.starttime}-${slot.timeslot.endtime}`}
-                    </th>
-                  )
-                )}
-              </tr>
-              {Object.entries(slots[selectedDay]).map(keyValue => (
-                <tr key={keyValue[0]}>
-                  <th className="slotVenue">{keyValue[0]}</th>
-                  {keyValue[1].map(slot => (
-                    <td
-                      key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
-                      item
-                    >
-                      <Slot attributes={slot} />
-                    </td>
-                  ))}
+      <Fragment>
+        <div className="timetable">
+          {slots && (
+            <table>
+              <tbody>
+                <tr>
+                  <th></th>
+                  {slots[selectedDay][Object.keys(slots[selectedDay])[0]].map(
+                    slot => (
+                      <th key={slot.timeslot.timeslotnum}>
+                        <div className="slotTime">
+                          {`${slot.timeslot.starttime}-${slot.timeslot.endtime}`}
+                        </div>
+                      </th>
+                    )
+                  )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                {Object.entries(slots[selectedDay]).map(keyValue => (
+                  <tr key={keyValue[0]}>
+                    <th className="slotVenue">{keyValue[0]}</th>
+                    {keyValue[1].map(slot => (
+                      <td
+                        key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
+                      >
+                        <Slot attributes={slot} />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+        <div className={slots ? "TimetableForm" : "hidden"}>
+          <TimetableForm
+            selectedDay={this.state.selectedDay}
+            handleDayChange={this.handleDayChange}
+          />
+        </div>
+      </Fragment>
     );
   }
 }

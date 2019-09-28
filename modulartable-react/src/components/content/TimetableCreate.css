@@ -5,3 +5,14 @@
   -o-transform: rotate(-90deg);
   transform: rotate(-90deg);
 }
+.timetable {
+  float: left;
+  margin: 0.5%;
+}
+.TimetableForm {
+  float: left;
+  margin: 0.5%;
+}
+.hidden {
+  visibility: hidden;
+}
