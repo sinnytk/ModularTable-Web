@@ -131,29 +131,36 @@ class SlotListView(generics.ListAPIView):
 
 class TimetableGenerateView(APIView):
     def get(self, request):
-        data = defaultdict(lambda: defaultdict(list))
+        slot_data = defaultdict(lambda: defaultdict(list))
+        teacher_data = Teachers.objects.all()
+        section_data = Sections.objects.all().order_by('semester', 'section')
+        course_data = Courses.objects.all().order_by('coursecode')
+
         slots = Slots.objects.all().order_by('daynum', 'venuenum__venuename', 'timeslot')
-        daynum = self.request.query_params.get('dayNum', None)
         sectionnum = self.request.query_params.get('sectionNum', None)
-        venuenum = self.request.query_params.get('venueNum', None)
         teachernum = self.request.query_params.get('teacherNum', None)
         coursenum = self.request.query_params.get('courseNum', None)
-        timeslot = self.request.query_params.get('timeslotNum', None)
 
-        if daynum:
-            slots = slots.filter(daynum=daynum)
         if sectionnum:
-            slots = slots.filter(sectionnum=sectionnum)
-        if venuenum:
-            slots = slots.filter(venuenum=venuenum)
+            sectionlist = [
+                int(x) for x in self.request.query_params['sectionNum'].split(',')
+            ]
+            slots = slots.filter(sectionnum__in=sectionlist)
         if teachernum:
-            slots = slots.filter(teachernum=teachernum)
+            teacherlist = [
+                int(x) for x in self.request.query_params['teacherNum'].split(',')
+            ]
+            slots = slots.filter(teachernum__in=teacherlist)
         if coursenum:
-            slots = slots.filter(coursenum=coursenum)
-        if timeslot:
-            slots = slots.filter(timeslot=timeslot)
+            courselist = [
+                int(x) for x in self.request.query_params['courseNum'].split(',')
+            ]
+            slots = slots.filter(coursenum__in=courselist)
 
         for slot in slots:
-            data[slot.daynum][slot.venuenum.venuename].append(
+            slot_data[slot.daynum][slot.venuenum.venuename].append(
                 SlotSerializer(slot).data)
-        return Response(data)
+        return Response(data={'slots': slot_data,
+                              'teachers': TeacherSerializer(teacher_data, many=True).data,
+                              'sections': SectionSerializer(section_data, many=True).data,
+                              'courses': CourseSerializer(course_data, many=True).data})
