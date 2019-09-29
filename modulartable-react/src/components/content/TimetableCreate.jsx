@@ -54,32 +54,23 @@ export default class TimetableCreate extends Component {
       selectedCourses,
       selectedSections
     } = selectedParams;
-    const teacherQuery =
-      selectedTeachers[0] !== 0
-        ? `teacherNum=${selectedTeachers.toString()}`
-        : "";
-    const courseQuery =
-      selectedCourses[0] !== 0 ? `courseNum=${selectedCourses.toString()}` : "";
-    const sectionQuery =
-      selectedSections[0] !== 0
-        ? `sectionNum=${selectedSections.toString()}`
-        : "";
-    axios
-      .get(
-        `${TIMETABLE_ENDPOINT}?${teacherQuery}&${courseQuery}&${sectionQuery}`
-      )
-      .then(response => {
-        const slots = response.data["slots"];
-        this.setState({
-          slots,
-          selectedTeachers,
-          selectedCourses,
-          selectedSections
-        });
-      })
-      .catch(error => {
-        console.log(error.response);
-      });
+    this.setState({ selectedTeachers, selectedCourses, selectedSections });
+  };
+  isSlotValid = slot => {
+    if (!slot.teacher) {
+      return true;
+    }
+    const selectedTeachers = this.state.selectedTeachers;
+    const selectedSections = this.state.selectedSections;
+    const selectedCourses = this.state.selectedCourses;
+    return (
+      (selectedTeachers[0] === 0 ||
+        selectedTeachers.includes(slot.teacher.teachernum)) &&
+      (selectedCourses[0] === 0 ||
+        selectedCourses.includes(slot.course.coursenum)) &&
+      (selectedSections[0] === 0 ||
+        selectedSections.includes(slot.section.sectionnum))
+    );
   };
   render() {
     const slots = this.state.slots;
@@ -115,7 +106,7 @@ export default class TimetableCreate extends Component {
                       <td
                         key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
                       >
-                        <Slot attributes={slot} />
+                        <Slot attributes={this.isSlotValid(slot) ? slot : {}} />
                       </td>
                     ))}
                   </tr>

@@ -12,12 +12,13 @@ const useStyles = makeStyles(theme => ({
   content: { paddingTop: "10%" }
 }));
 
+const placeholder = { teacher: null, section: null, course: null };
 const Slot = ({ attributes }) => {
-  const isEmpty = attributes.teacher ? false : true;
+  attributes = attributes.teacher ? attributes : placeholder;
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
-      {!isEmpty && (
+      {
         <div className={classes.content}>
           <Typography variant="caption" display="block">
             {attributes.teacher && `${attributes.teacher.teachername}`}
@@ -30,7 +31,7 @@ const Slot = ({ attributes }) => {
             {attributes.course && `${attributes.course.coursecode}`}
           </Typography>
         </div>
-      )}
+      }
     </Paper>
   );
 };

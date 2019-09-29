@@ -137,25 +137,6 @@ class TimetableGenerateView(APIView):
         course_data = Courses.objects.all().order_by('coursecode')
 
         slots = Slots.objects.all().order_by('daynum', 'venuenum__venuename', 'timeslot')
-        sectionnum = self.request.query_params.get('sectionNum', None)
-        teachernum = self.request.query_params.get('teacherNum', None)
-        coursenum = self.request.query_params.get('courseNum', None)
-
-        if sectionnum:
-            sectionlist = [
-                int(x) for x in self.request.query_params['sectionNum'].split(',')
-            ]
-            slots = slots.filter(sectionnum__in=sectionlist)
-        if teachernum:
-            teacherlist = [
-                int(x) for x in self.request.query_params['teacherNum'].split(',')
-            ]
-            slots = slots.filter(teachernum__in=teacherlist)
-        if coursenum:
-            courselist = [
-                int(x) for x in self.request.query_params['courseNum'].split(',')
-            ]
-            slots = slots.filter(coursenum__in=courselist)
 
         for slot in slots:
             slot_data[slot.daynum][slot.venuenum.venuename].append(
