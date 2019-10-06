@@ -2,6 +2,7 @@ const BASE_URL = "http://127.0.0.1:8000";
 
 //timetable specific endpoints
 export const TIMETABLE_ENDPOINT = `${BASE_URL}/timetable`;
+export const TIMETABLE_DOWNLOAD_ENDPOINT = `${BASE_URL}/timetable/xlsx`;
 
 //query specific endpoints
 export const SLOTS_ENDPOINT = `${BASE_URL}/slots?`;

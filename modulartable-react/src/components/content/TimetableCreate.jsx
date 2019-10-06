@@ -1,9 +1,16 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
-import { TIMETABLE_ENDPOINT } from "../constants/endpoints";
+import { TIMETABLE_ENDPOINT, TIMETABLE_DOWNLOAD_ENDPOINT } from "../constants/endpoints";
 import Slot from "./Timetable/Slot";
 import TimetableForm from "./Timetable/TimetableForm";
 import "./TimetableCreate.css";
+import {
+  Table,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from "@material-ui/core";
 
 export default class TimetableCreate extends Component {
   state = {
@@ -72,6 +79,29 @@ export default class TimetableCreate extends Component {
         selectedSections.includes(slot.section.sectionnum))
     );
   };
+  downloadXLSX = () => {
+    if (this.state.slots) {
+      const selectedTeachers = this.state.selectedTeachers.toString()
+      const selectedSections = this.state.selectedSections.toString()
+      const selectedCourses = this.state.selectedCourses.toString()
+      const teacher_param = selectedTeachers !== "0" ? `teacherNum=${selectedTeachers}` : ""
+      const section_param = selectedSections !== "0" ? `&sectionNum=${selectedSections}` : ""
+      const course_param = selectedCourses !== "0" ? `&courseNum=${selectedCourses}` : ""
+      axios
+        .get(`${TIMETABLE_DOWNLOAD_ENDPOINT}?${teacher_param}${section_param}${course_param}`,{responseType: 'blob'})
+        .then(response => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'ModularTable.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
+    }
+  };
   render() {
     const slots = this.state.slots;
     const selectedDay = this.state.selectedDay;
@@ -83,36 +113,44 @@ export default class TimetableCreate extends Component {
     const selectedCourses = this.state.selectedCourses;
     return (
       <Fragment>
-        <div className="timetable">
+        <div className="timetable" id={`timetable-${selectedDay}`}>
           {slots && (
-            <table>
-              <tbody>
-                <tr>
-                  <th></th>
+            <Table padding="none">
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
                   {slots[selectedDay][Object.keys(slots[selectedDay])[0]].map(
                     slot => (
-                      <th key={slot.timeslot.timeslotnum}>
+                      <TableCell
+                        key={slot.timeslot.timeslotnum}
+                        align="center"
+                        variant="head"
+                      >
                         <div className="slotTime">
                           {`${slot.timeslot.starttime}-${slot.timeslot.endtime}`}
                         </div>
-                      </th>
+                      </TableCell>
                     )
                   )}
-                </tr>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {Object.entries(slots[selectedDay]).map(keyValue => (
-                  <tr key={keyValue[0]}>
-                    <th className="slotVenue">{keyValue[0]}</th>
+                  <TableRow key={keyValue[0]}>
+                    <TableCell className="slotVenue" variant="head">
+                      {keyValue[0]}
+                    </TableCell>
                     {keyValue[1].map(slot => (
-                      <td
+                      <TableCell
                         key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
                       >
                         <Slot attributes={this.isSlotValid(slot) ? slot : {}} />
-                      </td>
+                      </TableCell>
                     ))}
-                  </tr>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           )}
         </div>
         <div className={slots ? "TimetableForm" : "hidden"}>
@@ -127,6 +165,11 @@ export default class TimetableCreate extends Component {
             handleDayChange={this.handleDayChange}
             handleMultipleChange={this.handleMultipleChange}
           />
+        </div>
+        <div>
+          <button id="xlsxbtn" onClick={this.downloadXLSX}>
+            Download XLSX
+          </button>
         </div>
       </Fragment>
     );

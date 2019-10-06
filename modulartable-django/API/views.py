@@ -1,4 +1,4 @@
-from core.models import Slots
+from django.http import HttpResponse
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from core.models import Slots, Venues, Courses, Teachers, Sections, Timeslots
 from .serializers import SlotSerializer, VenueSerializer, CourseSerializer, TeacherSerializer, SectionSerializer, TimeslotSerializer
 from collections import defaultdict
+from .utils import generate_excel
 
 
 class VenueListView(generics.ListAPIView):
@@ -145,3 +146,24 @@ class TimetableGenerateView(APIView):
                               'teachers': TeacherSerializer(teacher_data, many=True).data,
                               'sections': SectionSerializer(section_data, many=True).data,
                               'courses': CourseSerializer(course_data, many=True).data})
+
+
+class TimetablePDFView(APIView):
+    def get(self, request):
+        slots = Slots.objects.all().order_by('daynum', 'venuenum__venuename', 'timeslot')
+        query_course_list = query_teacher_list = query_section_list = None
+        if 'courseNum' in self.request.query_params:
+            query_course_list = [int(x) for x in self.request.query_params['courseNum'].split(',')]
+        if 'teacherNum' in self.request.query_params:
+            query_teacher_list = [int(x) for x in self.request.query_params['teacherNum'].split(',')]
+        if 'sectionNum' in self.request.query_params:
+            query_section_list = [int(x) for x in self.request.query_params['sectionNum'].split(',')]
+
+        excel_file = generate_excel(slots, query_course_list, query_teacher_list, query_section_list)
+        
+        if not excel_file:
+            return Response(data="ERROR! Couldn't create XLSX file", status=status.HTTP_400_BAD_REQUEST)
+        
+        response = HttpResponse(excel_file, content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=ModularTable.xlsx'
+        return response
