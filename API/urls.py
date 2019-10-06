@@ -8,6 +8,8 @@ urlpatterns = [
     path("courses", views.CourseListView.as_view(), name='course-list'),
     path("sections", views.SectionListView.as_view(), name='section-list'),
     path("timeslots", views.TimeslotListView.as_view(), name='timeslot-list'),
-    path("timetable", views.TimetableGenerateView.as_view(), name='timeslot-list')
+    path("timetable", views.TimetableGenerateView.as_view(), name='timetable-generate'),
+    path("timetable/xlsx", views.TimetablePDFView.as_view(), name='timetable-generate-excel')
+
 
 ]
