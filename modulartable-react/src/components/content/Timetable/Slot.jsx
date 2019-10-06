@@ -7,7 +7,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     textAlign: "center",
     minWidth: "1.1vw",
-    minHeight: "5vw"
+    minHeight: "5vw",
+    overflow: "auto",
+    border: "1px solid black"
   },
   content: { paddingTop: "10%" }
 }));
@@ -17,22 +19,18 @@ const Slot = ({ attributes }) => {
   attributes = attributes.teacher ? attributes : placeholder;
   const classes = useStyles();
   return (
-    <Paper className={classes.root}>
-      {
-        <div className={classes.content}>
-          <Typography variant="caption" display="block">
-            {attributes.teacher && `${attributes.teacher.teachername}`}
-          </Typography>
-          <Typography variant="caption" display="block">
-            {attributes.section &&
-              `${attributes.section.semester}${attributes.section.section}`}
-          </Typography>
-          <Typography variant="caption" display="block">
-            {attributes.course && `${attributes.course.coursecode}`}
-          </Typography>
-        </div>
-      }
-    </Paper>
+    <div className={classes.root}>
+      <Typography variant="caption" display="block">
+        {attributes.teacher && `${attributes.teacher.teachername}`}
+      </Typography>
+      <Typography variant="caption" display="block">
+        {attributes.section &&
+          `${attributes.section.semester}${attributes.section.section}`}
+      </Typography>
+      <Typography variant="caption" display="block">
+        {attributes.course && `${attributes.course.coursecode}`}
+      </Typography>
+    </div>
   );
 };
 
