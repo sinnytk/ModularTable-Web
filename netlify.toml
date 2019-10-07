@@ -1,4 +1,4 @@
 [build]
 base = "modulartable-react"
-publish = "modulartable-react/build/"
+publish = "build/"
 command = "yarn build"
