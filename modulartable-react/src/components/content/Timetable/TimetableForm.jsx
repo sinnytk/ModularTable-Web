@@ -5,8 +5,9 @@ import {
   Select,
   MenuItem,
   makeStyles,
-  Menu,
-  Button
+  Hidden,
+  Button,
+  Container
 } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -77,26 +78,28 @@ const TimetableForm = props => {
     });
   };
   return (
-    <Fragment>
+    <Container>
       <form autoComplete="off" className={classes.root}>
-        <FormControl className={classes.formControl}>
-          <InputLabel>Day</InputLabel>
-          <Select
-            value={props.selectedDay}
-            onChange={handleDayChange}
-            inputProps={{
-              name: "day",
-              id: "timetable-day"
-            }}
-          >
-            <MenuItem value={1}>Monday</MenuItem>
-            <MenuItem value={2}>Tuesday</MenuItem>
-            <MenuItem value={3}>Wednesday</MenuItem>
-            <MenuItem value={4}>Thursday</MenuItem>
-            <MenuItem value={5}>Friday</MenuItem>
-            <MenuItem value={6}>Saturday</MenuItem>
-          </Select>
-        </FormControl>
+        <Hidden lgDown>
+          <FormControl className={classes.formControl}>
+            <InputLabel>Day</InputLabel>
+            <Select
+              value={props.selectedDay}
+              onChange={handleDayChange}
+              inputProps={{
+                name: "day",
+                id: "timetable-day"
+              }}
+            >
+              <MenuItem value={1}>Monday</MenuItem>
+              <MenuItem value={2}>Tuesday</MenuItem>
+              <MenuItem value={3}>Wednesday</MenuItem>
+              <MenuItem value={4}>Thursday</MenuItem>
+              <MenuItem value={5}>Friday</MenuItem>
+              <MenuItem value={6}>Saturday</MenuItem>
+            </Select>
+          </FormControl>
+        </Hidden>
         <FormControl className={classes.formControl}>
           <InputLabel>Teacher(s)</InputLabel>
           <Select
@@ -163,12 +166,13 @@ const TimetableForm = props => {
             className={classes.downloadBtn}
             variant="contained"
             color="primary"
+            onClick={props.downloadXLSX}
           >
             Download Excel
           </Button>
         </FormControl>
       </form>
-    </Fragment>
+    </Container>
   );
 };
 export default TimetableForm;

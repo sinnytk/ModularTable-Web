@@ -13,7 +13,8 @@ import {
   TableRow,
   TableHead,
   TableCell,
-  Container
+  Container,
+  Hidden
 } from "@material-ui/core";
 
 export default class TimetableCreate extends Component {
@@ -123,46 +124,50 @@ export default class TimetableCreate extends Component {
     const selectedCourses = this.state.selectedCourses;
     return (
       <Container>
-        <div className="timetable" id={`timetable-${selectedDay}`}>
-          {slots && (
-            <Table padding="none">
-              <TableHead>
-                <TableRow>
-                  <TableCell></TableCell>
-                  {slots[selectedDay][Object.keys(slots[selectedDay])[0]].map(
-                    slot => (
-                      <TableCell
-                        key={slot.timeslot.timeslotnum}
-                        align="center"
-                        variant="head"
-                      >
-                        <div className="slotTime">
-                          {`${slot.timeslot.starttime}-${slot.timeslot.endtime}`}
-                        </div>
-                      </TableCell>
-                    )
-                  )}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.entries(slots[selectedDay]).map(keyValue => (
-                  <TableRow key={keyValue[0]}>
-                    <TableCell className="slotVenue" variant="head">
-                      {keyValue[0]}
-                    </TableCell>
-                    {keyValue[1].map(slot => (
-                      <TableCell
-                        key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
-                      >
-                        <Slot attributes={this.isSlotValid(slot) ? slot : {}} />
-                      </TableCell>
-                    ))}
+        <Hidden lgDown>
+          <div className="timetable" id={`timetable-${selectedDay}`}>
+            {slots && (
+              <Table padding="none">
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    {slots[selectedDay][Object.keys(slots[selectedDay])[0]].map(
+                      slot => (
+                        <TableCell
+                          key={slot.timeslot.timeslotnum}
+                          align="center"
+                          variant="head"
+                        >
+                          <div className="slotTime">
+                            {`${slot.timeslot.starttime}-${slot.timeslot.endtime}`}
+                          </div>
+                        </TableCell>
+                      )
+                    )}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </div>
+                </TableHead>
+                <TableBody>
+                  {Object.entries(slots[selectedDay]).map(keyValue => (
+                    <TableRow key={keyValue[0]}>
+                      <TableCell className="slotVenue" variant="head">
+                        {keyValue[0]}
+                      </TableCell>
+                      {keyValue[1].map(slot => (
+                        <TableCell
+                          key={`${slot.daynum}-${slot.timeslot.timeslotnum}-${slot.venuenum}`}
+                        >
+                          <Slot
+                            attributes={this.isSlotValid(slot) ? slot : {}}
+                          />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </div>
+        </Hidden>
         <div className={slots ? "TimetableForm" : "hidden"}>
           <TimetableForm
             teachers={teachers}
