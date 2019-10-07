@@ -17,6 +17,9 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120
+  },
+  downloadBtn: {
+    margin: "10px"
   }
 }));
 
@@ -100,6 +103,7 @@ const TimetableForm = props => {
             multiple
             value={selectedTeachers}
             onChange={handleTeacherChange}
+            onClose={submitChanges}
             inputProps={{
               name: "teacher(s)",
               id: "timetable-teacher"
@@ -124,6 +128,7 @@ const TimetableForm = props => {
               name: "course(s)",
               id: "timetable-course"
             }}
+            onClose={submitChanges}
           >
             <MenuItem value={0}>ALL</MenuItem>
             {courses &&
@@ -144,6 +149,7 @@ const TimetableForm = props => {
               name: "section(s)",
               id: "timetable-section"
             }}
+            onClose={submitChanges}
           >
             <MenuItem value={0}>ALL</MenuItem>
             {sections &&
@@ -153,11 +159,15 @@ const TimetableForm = props => {
                 </MenuItem>
               ))}
           </Select>
+          <Button
+            className={classes.downloadBtn}
+            variant="contained"
+            color="primary"
+          >
+            Download
+          </Button>
         </FormControl>
       </form>
-      <Button variant="contained" color="primary" onClick={submitChanges}>
-        Create
-      </Button>
     </Fragment>
   );
 };
