@@ -19,11 +19,10 @@ import {
 
 export default class TimetableCreate extends Component {
   state = {
-    timeslots: null,
-    slots: this.props.slots,
-    teachers: this.props.teachers,
-    sections: this.props.sections,
-    courses: this.props.courses,
+    slots: this.props.data.slots,
+    teachers: this.props.data.teachers,
+    sections: this.props.data.sections,
+    courses: this.props.data.courses,
     selectedTeachers: this.props.selectedTeachers
       ? this.props.selectedTeachers
       : [0],
@@ -50,7 +49,7 @@ export default class TimetableCreate extends Component {
             sections,
             courses
           });
-          this.props.updateSlots({ slots });
+          this.props.updateData({ slots, teachers, sections, courses });
         })
         .catch(error => {
           console.log(error.response);

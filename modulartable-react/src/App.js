@@ -5,22 +5,37 @@ import TimetableCreate from "./components/content/TimetableCreate";
 import TimetableQuery from "./components/content/TimetableQuery";
 
 export class App extends Component {
-  state = { activeTabIndex: 1, slots: null };
+  state = {
+    activeTabIndex: 1,
+    slots: null,
+    teachers: null,
+    sections: null,
+    courses: null
+  };
   navigate = navigatedTo => {
     this.setState({ activeTabIndex: navigatedTo });
   };
-  updateSlotsFromChild = slots => {
-    this.setState({ slots: slots.slots });
+  updateTimetableDataFromChild = data => {
+    this.setState({
+      slots: data.slots,
+      teachers: data.teachers,
+      sections: data.sections,
+      courses: data.courses
+    });
   };
   render() {
     const tabIndex = this.state.activeTabIndex;
+    const slots = this.state.slots;
+    const teachers = this.state.teachers;
+    const sections = this.state.sections;
+    const courses = this.state.courses;
     return (
       <div>
         <Header navigateParent={this.navigate} />
         {tabIndex === 0 && (
           <TimetableCreate
-            slots={this.state.slots}
-            updateSlots={this.updateSlotsFromChild}
+            data={{ slots, teachers, sections, courses }}
+            updateData={this.updateTimetableDataFromChild}
           />
         )}
         {tabIndex === 1 && <Home />}
