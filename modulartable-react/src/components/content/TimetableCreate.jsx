@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from "react";
 import axios from "axios";
-import { TIMETABLE_ENDPOINT, TIMETABLE_DOWNLOAD_ENDPOINT } from "../constants/endpoints";
+import {
+  TIMETABLE_ENDPOINT,
+  TIMETABLE_DOWNLOAD_ENDPOINT
+} from "../constants/endpoints";
 import Slot from "./Timetable/Slot";
 import TimetableForm from "./Timetable/TimetableForm";
 import "./TimetableCreate.css";
@@ -9,7 +12,8 @@ import {
   TableBody,
   TableRow,
   TableHead,
-  TableCell
+  TableCell,
+  Container
 } from "@material-ui/core";
 
 export default class TimetableCreate extends Component {
@@ -81,19 +85,25 @@ export default class TimetableCreate extends Component {
   };
   downloadXLSX = () => {
     if (this.state.slots) {
-      const selectedTeachers = this.state.selectedTeachers.toString()
-      const selectedSections = this.state.selectedSections.toString()
-      const selectedCourses = this.state.selectedCourses.toString()
-      const teacher_param = selectedTeachers !== "0" ? `teacherNum=${selectedTeachers}` : ""
-      const section_param = selectedSections !== "0" ? `&sectionNum=${selectedSections}` : ""
-      const course_param = selectedCourses !== "0" ? `&courseNum=${selectedCourses}` : ""
+      const selectedTeachers = this.state.selectedTeachers.toString();
+      const selectedSections = this.state.selectedSections.toString();
+      const selectedCourses = this.state.selectedCourses.toString();
+      const teacher_param =
+        selectedTeachers !== "0" ? `teacherNum=${selectedTeachers}` : "";
+      const section_param =
+        selectedSections !== "0" ? `&sectionNum=${selectedSections}` : "";
+      const course_param =
+        selectedCourses !== "0" ? `&courseNum=${selectedCourses}` : "";
       axios
-        .get(`${TIMETABLE_DOWNLOAD_ENDPOINT}?${teacher_param}${section_param}${course_param}`,{responseType: 'blob'})
+        .get(
+          `${TIMETABLE_DOWNLOAD_ENDPOINT}?${teacher_param}${section_param}${course_param}`,
+          { responseType: "blob" }
+        )
         .then(response => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
+          const link = document.createElement("a");
           link.href = url;
-          link.setAttribute('download', 'ModularTable.xlsx');
+          link.setAttribute("download", "ModularTable.xlsx");
           document.body.appendChild(link);
           link.click();
         })
@@ -112,7 +122,7 @@ export default class TimetableCreate extends Component {
     const selectedSections = this.state.selectedSections;
     const selectedCourses = this.state.selectedCourses;
     return (
-      <Fragment>
+      <Container>
         <div className="timetable" id={`timetable-${selectedDay}`}>
           {slots && (
             <Table padding="none">
@@ -164,14 +174,10 @@ export default class TimetableCreate extends Component {
             selectedCourses={selectedCourses}
             handleDayChange={this.handleDayChange}
             handleMultipleChange={this.handleMultipleChange}
+            downloadXLSX={this.downloadXLSX}
           />
         </div>
-        <div>
-          <button id="xlsxbtn" onClick={this.downloadXLSX}>
-            Download XLSX
-          </button>
-        </div>
-      </Fragment>
+      </Container>
     );
   }
 }

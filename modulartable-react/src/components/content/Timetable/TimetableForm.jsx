@@ -164,7 +164,7 @@ const TimetableForm = props => {
             variant="contained"
             color="primary"
           >
-            Download
+            Download Excel
           </Button>
         </FormControl>
       </form>
