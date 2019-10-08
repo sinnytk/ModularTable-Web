@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d54db1b418b73daac680565bcb842fac86f7f1c410ba9fcf86e0452af3ff456d"
+            "sha256": "020aa9dab4c6d89da1d1753881ff0932c99a4f163340a9641ae630de0426801f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -39,6 +39,14 @@
             ],
             "index": "pypi",
             "version": "==3.1.0"
+        },
+        "django-heroku": {
+            "hashes": [
+                "sha256:2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762",
+                "sha256:6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e"
+            ],
+            "index": "pypi",
+            "version": "==0.3.1"
         },
         "djangorestframework": {
             "hashes": [
@@ -138,6 +146,14 @@
             ],
             "index": "pypi",
             "version": "==0.3.0"
+        },
+        "whitenoise": {
+            "hashes": [
+                "sha256:22f79cf8f1f509639330f93886acaece8ec5ac5e9600c3b981d33c34e8a42dfd",
+                "sha256:6dfea214b7c12efd689007abf9afa87a426586e9dbc051873ad2c8e535e2a1ac"
+            ],
+            "index": "pypi",
+            "version": "==4.1.4"
         }
     },
     "develop": {}
