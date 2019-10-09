@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "http://sinnytk.pythonanywhere.com/";
 
 //timetable specific endpoints
 export const TIMETABLE_ENDPOINT = `${BASE_URL}/timetable`;
