@@ -123,7 +123,7 @@ export default class TimetableCreate extends Component {
     const selectedCourses = this.state.selectedCourses;
     return (
       <Container>
-        <Hidden lgDown>
+        <Hidden smDown>
           <div className="timetable" id={`timetable-${selectedDay}`}>
             {slots && (
               <Table padding="none">
