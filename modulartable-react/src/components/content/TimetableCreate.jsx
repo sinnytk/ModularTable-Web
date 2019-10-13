@@ -14,7 +14,8 @@ import {
   TableHead,
   TableCell,
   Container,
-  Hidden
+  Hidden,
+  LinearProgress
 } from "@material-ui/core";
 
 export default class TimetableCreate extends Component {
@@ -123,6 +124,11 @@ export default class TimetableCreate extends Component {
     const selectedCourses = this.state.selectedCourses;
     return (
       <Container>
+        {!slots && (
+          <div>
+            <LinearProgress color="secondary"></LinearProgress>
+          </div>
+        )}
         <Hidden smDown>
           <div className="timetable" id={`timetable-${selectedDay}`}>
             {slots && (
