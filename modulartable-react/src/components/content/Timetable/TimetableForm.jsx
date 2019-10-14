@@ -80,7 +80,7 @@ const TimetableForm = props => {
   return (
     <Container>
       <form autoComplete="off" className={classes.root}>
-        <Hidden lgDown>
+        <Hidden smDown>
           <FormControl className={classes.formControl}>
             <InputLabel>Day</InputLabel>
             <Select
