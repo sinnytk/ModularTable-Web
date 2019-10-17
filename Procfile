@@ -1,0 +1,1 @@
+web: gunicorn modulartable.wsgi --log-file -
