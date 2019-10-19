@@ -8,16 +8,18 @@ export default class Header extends Component {
   };
 
   handleChange = (event, value) => {
+    const { navigateParent } = this.props;
     this.setState({ activeTabIndex: value });
-    this.props.navigateParent(value);
+    navigateParent(value);
   };
 
   render() {
+    const { activeTabIndex } = this.state;
     return (
       <div>
         <AppBar position="static">
           <Tabs
-            value={this.state.activeTabIndex}
+            value={activeTabIndex}
             indicatorColor="secondary"
             onChange={this.handleChange}
             centered
