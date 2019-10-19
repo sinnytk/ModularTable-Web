@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import {
   TIMETABLE_ENDPOINT,
@@ -114,14 +114,7 @@ export default class TimetableCreate extends Component {
     }
   };
   render() {
-    const slots = this.state.slots;
-    const selectedDay = this.state.selectedDay;
-    const teachers = this.state.teachers;
-    const sections = this.state.sections;
-    const courses = this.state.courses;
-    const selectedTeachers = this.state.selectedTeachers;
-    const selectedSections = this.state.selectedSections;
-    const selectedCourses = this.state.selectedCourses;
+    const { slots, selectedDay, teachers, sections, section, courses, selectedTeachers, selectedSections, selectedCourses } = this.state;
     return (
       <Container>
         {!slots && (

@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   InputLabel,
@@ -25,18 +25,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TimetableForm = props => {
+  const { downloadXLSX, handleMultipleChange, teachers, sections, courses, selectedDay } = props;
   const classes = useStyles();
 
-  const teachers = props.teachers;
-  const sections = props.sections;
-  const courses = props.courses;
-  const [selectedTeachers, setSelectedTeachers] = useState(
-    props.selectedTeachers
-  );
+
+  const [selectedTeachers, setSelectedTeachers] = useState(props.selectedTeachers);
   const [selectedCourses, setSelectedCourses] = useState(props.selectedCourses);
-  const [selectedSections, setSelectedSections] = useState(
-    props.selectedSections
-  );
+  const [selectedSections, setSelectedSections] = useState(props.selectedSections);
 
   const handleDayChange = event => {
     props.handleDayChange(event.target.value);
@@ -71,7 +66,7 @@ const TimetableForm = props => {
     setSelectedSections(values);
   };
   const submitChanges = () => {
-    props.handleMultipleChange({
+    handleMultipleChange({
       selectedTeachers,
       selectedCourses,
       selectedSections
@@ -84,7 +79,7 @@ const TimetableForm = props => {
           <FormControl className={classes.formControl}>
             <InputLabel>Day</InputLabel>
             <Select
-              value={props.selectedDay}
+              value={selectedDay}
               onChange={handleDayChange}
               inputProps={{
                 name: "day",
@@ -166,7 +161,7 @@ const TimetableForm = props => {
             className={classes.downloadBtn}
             variant="contained"
             color="primary"
-            onClick={props.downloadXLSX}
+            onClick={downloadXLSX}
           >
             Download Excel
           </Button>

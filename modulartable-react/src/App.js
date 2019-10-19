@@ -24,11 +24,7 @@ export class App extends Component {
     });
   };
   render() {
-    const tabIndex = this.state.activeTabIndex;
-    const slots = this.state.slots;
-    const teachers = this.state.teachers;
-    const sections = this.state.sections;
-    const courses = this.state.courses;
+    const { tabIndex, slots, teachers, sections, courses } = this.state;
     return (
       <div>
         <Header navigateParent={this.navigate} />
