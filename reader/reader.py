@@ -1,7 +1,7 @@
 from openpyxl import load_workbook
 from datetime import time as Time
 import config
-import mysql.connector
+import psycopg2
 
 
 class TimeSlot():
@@ -161,21 +161,17 @@ def main():
                     slots.append(Slot(sheetnum+1,all_venues[venue],all_timeslots[timeslot],all_courses[courseObj],all_teachers[teacherObj],all_sections[sectionObj]))
     
     try:
-        dbconn = mysql.connector.connect(
-            host=config.host,
-            user=config.user,
-            passwd=config.passwd,
-            database=config.database
+        dbconn = psycopg2.connect(
+            config.DATABASE_URL
         )
-        courseQuery = ("INSERT INTO courses" "(courseCode) " "values (%s)")
+        courseQuery = ("INSERT INTO courses" "(coursecode) " "values (%s)")
         sectionQuery = ("INSERT INTO sections" "(semester,section) " "values (%s,%s)")
-        teacherQuery = ("INSERT INTO teachers" "(teacherName) " "values (%s)")
-        timeslotQuery = ("INSERT INTO timeslots" "(startTime, endTime) " "values (%s,%s)")
-        venueQuery = ("INSERT INTO venues" "(venueName) " "values (%s)")
+        teacherQuery = ("INSERT INTO teachers" "(teachername) " "values (%s)")
+        timeslotQuery = ("INSERT INTO timeslots" "(starttime, endtime) " "values (%s,%s)")
+        venueQuery = ("INSERT INTO venues" "(venuename) " "values (%s)")
         slotQuery = ("INSERT INTO slots " "values (%s,%s,%s,%s,%s,%s)")
         
         cursor=dbconn.cursor()
-        cursor.execute("SET FOREIGN_KEY_CHECKS=0")
         for course in all_courses:
             if course != '':
                 print("Inserting "+course.__repr__())
@@ -200,14 +196,12 @@ def main():
             if slot != '':
                 print("Inserting "+slot.__repr__())
                 cursor.execute(slotQuery, (slot.dayNum,slot.venueNum,slot.timeslotNum, slot.courseNum,slot.teacherNum,slot.sectionNum))
-        cursor.execute("SET FOREIGN_KEY_CHECKS=1")
-        dbconn.commit()        
-    except mysql.connector.Error as error:
+        dbconn.commit()
+    except psycopg2.Error as error:
         print("Fail {}".format(error))
     finally:
-        if(dbconn.is_connected()):
-            cursor.close()
-            dbconn.close() 
+        cursor.close()
+        dbconn.close() 
 
 if __name__ == "__main__":
     main()
