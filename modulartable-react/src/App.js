@@ -24,18 +24,18 @@ export class App extends Component {
     });
   };
   render() {
-    const { tabIndex, slots, teachers, sections, courses } = this.state;
+    const { activeTabIndex, slots, teachers, sections, courses } = this.state;
     return (
       <div>
         <Header navigateParent={this.navigate} />
-        {tabIndex === 0 && (
+        {activeTabIndex === 0 && (
           <TimetableCreate
             data={{ slots, teachers, sections, courses }}
             updateData={this.updateTimetableDataFromChild}
           />
         )}
-        {tabIndex === 1 && <Home />}
-        {tabIndex === 2 && <TimetableQuery />}
+        {activeTabIndex === 1 && <Home />}
+        {activeTabIndex === 2 && <TimetableQuery />}
       </div>
     );
   }
