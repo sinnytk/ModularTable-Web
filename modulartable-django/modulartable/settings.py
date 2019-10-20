@@ -49,6 +49,7 @@ ROOT_URLCONF = 'modulartable.urls'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
+    'https://modulartable.netlify.com',
 ]
 
 TEMPLATES = [
