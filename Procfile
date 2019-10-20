@@ -1,1 +1,1 @@
-web: gunicorn modulartable-django/modulartable.wsgi --log-file -
+web: gunicorn --pythonpath modulartable-django modulartable.wsgi --log-file -
